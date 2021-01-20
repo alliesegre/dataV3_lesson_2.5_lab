@@ -1,0 +1,10 @@
+Select all the actors with the first name ‘Scarlett’.
+How many films (movies) are available for rent and how many films have been rented?
+What are the shortest and longest movie duration? Name the values max_duration and min_duration.
+What's the average movie duration expressed in format (hours, minutes)?
+How many distinct (different) actors' last names are there?
+Since how many days has the company been operating (check DATEDIFF() function)?
+Show rental info with additional columns month and weekday. Get 20 results.
+Add an additional column day_type with values 'weekend' and 'workday' depending on the rental day of the week.
+How many rentals were in the last month of activity?
+SELECT 
