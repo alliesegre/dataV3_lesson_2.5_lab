@@ -1,0 +1,90 @@
+1.Get release years.
+1.SELECT release_year FROM sakila.film;
+
+2. Get all films with ARMAGEDDON in the title.
+2. 
+SELECT * FROM sakila.film WHERE title LIKE '%ARMAGEDDON%';
+SELECT * FROM film WHERE title REGEXP 'ARMAGEDDON';
+
+3.Get all films which title ends with APOLLO.
+3. 
+SELECT * FROM sakila.film WHERE title LIKE '%APOLLO';
+SELECT * FROM sakila.film REGEXP 'APOLLO$';
+
+4.Get 10 the longest films.
+4.
+SELECT * FROM sakila.film ORDER BY length DESC LIMIT 10;
+
+5.How many films include Behind the Scenes content?
+5.
+SELECT * FROM sakila.film WHERE special_features LIKE '%Behind the Scenes%';
+SELECT COUNT(*) FROM sakila.film WHERE special_features LIKE '%Behind the Scenes%';  
+
+6.Drop column picture from staff.
+6.
+ALTER TABLE sakila.staff DROP COLUMN picture;
+
+7. A new person is hired to help Jon. Her name is TAMMY SANDERS, and she is a customer. Update the database accordingly.
+7.
+Find Tammy --> SELECT * FROM sakila.customer WHERE first_name LIKE 'TAMMY' AND last_name LIKE 'SANDERS';
+She is a customer (id 75), now we have to add her to Store 2 to help Jon:
+
+INSERT INTO sakila.staff 
+(staff_id, first_name, last_name, address_id, email, store_id, active, username, password, last_update)
+SELECT 
+'3',
+first_name,
+last_name,
+address_id,
+email,
+'2',
+active,
+first_name,
+'passtest',
+last_update
+FROM sakila.customer
+WHERE first_name LIKE 'TAMMY' 
+AND last_name LIKE 'SANDERS';
+
+8. Add rental for movie "Academy Dinosaur" by Charlotte Hunter from Mike Hillyer at Store 1. You can use current date for the rental_date column in the rental table. Hint: Check the columns in the table rental and see what information you would need to add there. You can query those pieces of information. For eg., you would notice that you need customer_id information as well. To get that you can use the following query:
+-select customer_id from sakila.customer:
+SELECT customer-id FROM sakila.customer WHERE first_name = 'CHARLOTTE' AND last_name = 'HUNTER';
+-Select inventory_id
+SELECT inventory_id FROM sakila.inventory WHERE film_id = 1;
+-Select film_id
+SELECT film_id FROM sakila.film WHERE title = 'ACADEMY DINOSAUR';
+-Select staff_id
+SELECT * FROM sakila.staff;
+
+INSERT INTO sakila.rental(rental_date, inventory_id, customer_id, staff_id)
+VALUES (CURDATE(), 1, 130, 1);
+
+9. Delete non-active users, but first, create a backup table deleted_users to store customer_id, email, and the date for the users that would be deleted. Follow these steps:
+
+Check if there are any non-active users:
+SELECT * FROM sakila.customer
+WHERE active = 0;
+
+Create a table backup table as suggested:
+DROP TABLE IF EXISTS inactive_users;
+CREATE TABLE inactive_users(
+customer_id int UNIQUE NOT NULL,
+email varchar(50) UNIQUE NOT NULL,
+delete_date date);
+
+Insert the non active users in the table backup table:
+INSERT INTO inactive_users
+SELECT customer_id, email, curdate()
+FROM customer
+WHERE active = 0;
+
+Delete the non active users from the table customer
+DELETE FROM customer WHERE active = 0
+
+
+
+
+
+
+
+
